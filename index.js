@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var irc = require('irc')
 var level = require('level')
 var hypercore = require('hypercore')
