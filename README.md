@@ -36,6 +36,12 @@ Thats it! Every peer tailing (and the peer mirroring) will join the p2p network 
 
 For more options run `hyperirc --help`.
 
+## Mirrored IRC channels
+
+* #dat on freenode, `hyperirc --tail=4e397d94d0f5df0e2268b2b7b23948b6dddfca66f91c2d452f404202e6d0f626`
+
+If you mirror a channel open a PR and add your key.
+
 ## License
 
 MIT
