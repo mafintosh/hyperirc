@@ -4,7 +4,9 @@ Read IRC through hypercore.
 
 ## What is it?
 
-Hyperirc is a bot that mirrors irc channels to a [hypercore](https;//github.com/mafintosh/hypercore) append-only log.
+[Hypercore](https;//github.com/mafintosh/hypercore) is the underlying p2p network that powers [Dat](https://dat-data.com)
+
+Hyperirc is a bot that mirrors irc channels to a hypercore append-only log.
 This allows you to read an IRC channel using the hypercore p2p network. Anyone who is reading the irc logs is also helping hosting them.
 
 ## Usage
