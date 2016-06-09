@@ -36,6 +36,17 @@ Thats it! Every peer tailing (and the peer mirroring) will join the p2p network 
 
 For more options run `hyperirc --help`.
 
+## Browser support
+
+You can also seed the irc logs to the browser by adding the `--webrtc` option. This will make hyperirc join a p2p webrtc swarm
+as well.
+
+``` sh
+hyperirc --tail=the-key-printed-out-above --webrtc
+```
+
+To view the logs in the browser visit the static website hosted here, https://github.com/mafintosh/hyperirc-www
+
 ## Mirrored IRC channels
 
 * #dat on freenode, `hyperirc --tail=4e397d94d0f5df0e2268b2b7b23948b6dddfca66f91c2d452f404202e6d0f626`

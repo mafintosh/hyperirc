@@ -14,10 +14,11 @@ var argv = minimist(process.argv.slice(2), {
     channel: 'c',
     feed: 'f',
     server: 's',
-    name: 'n'
+    name: 'n',
   },
   default: {
-    server: 'irc.freenode.net'
+    server: 'irc.freenode.net',
+    signalhub: 'https://signalhub.mafintosh.com'
   }
 })
 
@@ -27,6 +28,7 @@ if (!argv.channel && !argv.feed || argv.help) {
   console.error('  --mirror=[channel-name]  IRC channel to mirror')
   console.error('  --server=[irc-server]    Optional IRC server. Defaults to freenode')
   console.error('  --tail=[feed-key]        A mirrored channel to tail')
+  console.error('  --webrtc                 Share over webrtc as well.')
   console.error('  --all                    Print the entire channel log.')
   console.error()
   console.error('You must specify either --tail or --mirror')
@@ -109,4 +111,21 @@ db.get('!hyperirc!!channels!' + argv.channel, {valueEncoding: 'binary'}, functio
       console.log('(peer left, %d total)', --cnt)
     })
   })
+
+  if (argv.webrtc) {
+    var signalhub = require('signalhub')
+    var webrtcSwarm = require('webrtc-swarm')
+    var pump = require('pump')
+    var wsw = webrtcSwarm(signalhub('hyperirc-' + feed.discoveryKey.toString('hex'), argv.signalhub), {
+      wrtc: require('electron-webrtc')({headless: true})
+    })
+
+    wsw.on('peer', function (connection) {
+      console.log('(webrtc peer joined, %d total', ++cnt)
+      var peer = feed.replicate()
+      pump(peer, connection, peer, function () {
+        console.log('(webrtc peer left, %d total', --cnt)
+      })
+    })
+  }
 })

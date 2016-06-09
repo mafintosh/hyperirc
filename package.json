@@ -9,6 +9,7 @@
   "dependencies": {
     "datland-swarm-defaults": "^1.0.0",
     "discovery-swarm": "^3.4.0",
+    "electron-webrtc": "^0.2.5",
     "hypercore": "^4.2.5",
     "irc": "^0.5.0",
     "level": "^1.4.0",
@@ -29,5 +30,11 @@
   "bugs": {
     "url": "https://github.com/mafintosh/hyperirc/issues"
   },
-  "homepage": "https://github.com/mafintosh/hyperirc"
+  "homepage": "https://github.com/mafintosh/hyperirc",
+  "optionalDependencies": {
+    "electron-webrtc": "^0.2.5",
+    "pump": "^1.0.1",
+    "signalhub": "^4.5.1",
+    "webrtc-swarm": "^2.4.0"
+  }
 }
