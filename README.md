@@ -39,6 +39,7 @@ For more options run `hyperirc --help`.
 ## Mirrored IRC channels
 
 * #dat on freenode, `hyperirc --tail=4e397d94d0f5df0e2268b2b7b23948b6dddfca66f91c2d452f404202e6d0f626`
+* #cphftw on freenode, `hyperirc --tail=a8d20e7d305a95904798142de0b75dff251b84db73873fd4aba73d5bdc7b50cf`
 
 If you mirror a channel open a PR and add your key.
 
