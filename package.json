@@ -12,8 +12,9 @@
     "electron-webrtc": "^0.2.5",
     "hypercore": "^4.2.5",
     "irc": "^0.5.0",
-    "level": "^1.4.0",
-    "minimist": "^1.2.0"
+    "level-party": "^3.0.4",
+    "minimist": "^1.2.0",
+    "subleveldown": "^2.1.0"
   },
   "devDependencies": {
     "standard": "^7.1.2"

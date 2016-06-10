@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 var irc = require('irc')
-var level = require('level')
+var sub = require('subleveldown')
+var level = require('level-party')
 var hypercore = require('hypercore')
 var swarm = require('discovery-swarm')
 var defaults = require('datland-swarm-defaults')
@@ -14,7 +15,7 @@ var argv = minimist(process.argv.slice(2), {
     channel: 'c',
     feed: 'f',
     server: 's',
-    name: 'n',
+    name: 'n'
   },
   default: {
     server: 'irc.freenode.net',
@@ -38,7 +39,9 @@ if (!argv.channel && !argv.feed || argv.help) {
 
 if (argv.channel) argv.channel = argv.channel.replace(/^#/, '')
 
-var db = level('hyperirc.db')
+var lev = level('hyperirc.db')
+var dbKey = argv.channel ? argv.channel : argv.feed
+var db = sub(lev, dbKey)
 var core = hypercore(db)
 
 db.get('!hyperirc!!channels!' + argv.channel, {valueEncoding: 'binary'}, function (_, key) {
