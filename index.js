@@ -14,7 +14,7 @@ var argv = minimist(process.argv.slice(2), {
     channel: 'c',
     feed: 'f',
     server: 's',
-    name: 'n',
+    name: 'n'
   },
   default: {
     server: 'irc.freenode.net',
@@ -38,7 +38,8 @@ if (!argv.channel && !argv.feed || argv.help) {
 
 if (argv.channel) argv.channel = argv.channel.replace(/^#/, '')
 
-var db = level('hyperirc.db')
+var dbKey = argv.channel ? argv.channel : argv.feed
+var db = level('hyperirc.db.' + dbKey)
 var core = hypercore(db)
 
 db.get('!hyperirc!!channels!' + argv.channel, {valueEncoding: 'binary'}, function (_, key) {
