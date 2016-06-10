@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 var irc = require('irc')
-var sub = require('subleveldown')
 var level = require('level-party')
 var hypercore = require('hypercore')
 var swarm = require('discovery-swarm')
@@ -39,9 +38,7 @@ if (!argv.channel && !argv.feed || argv.help) {
 
 if (argv.channel) argv.channel = argv.channel.replace(/^#/, '')
 
-var lev = level('hyperirc.db')
-var dbKey = argv.channel ? argv.channel : argv.feed
-var db = sub(lev, dbKey)
+var db = level('hyperirc.db')
 var core = hypercore(db)
 
 db.get('!hyperirc!!channels!' + argv.channel, {valueEncoding: 'binary'}, function (_, key) {
