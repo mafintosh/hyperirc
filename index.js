@@ -39,7 +39,7 @@ if (!argv.channel && !argv.feed || argv.help) {
 
 if (argv.channel) argv.channel = argv.channel.replace(/^#/, '')
 
-var lev = level('hyperirc.db.' + dbKey)
+var lev = level('hyperirc.db')
 var dbKey = argv.channel ? argv.channel : argv.feed
 var db = sub(lev, dbKey)
 var core = hypercore(db)
