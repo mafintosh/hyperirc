@@ -13,7 +13,8 @@
     "hypercore": "^4.2.5",
     "irc": "^0.5.0",
     "level-party": "^3.0.4",
-    "minimist": "^1.2.0"
+    "minimist": "^1.2.0",
+    "os-homedir": "^1.0.1"
   },
   "devDependencies": {
     "standard": "^7.1.2"
