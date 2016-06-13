@@ -6,12 +6,15 @@ var hypercore = require('hypercore')
 var swarm = require('discovery-swarm')
 var defaults = require('datland-swarm-defaults')
 var minimist = require('minimist')
+var home = require('os-homedir')
+var path = require('path')
 
 var argv = minimist(process.argv.slice(2), {
   alias: {
     mirror: 'channel',
     tail: 'feed',
     channel: 'c',
+    database: 'd',
     feed: 'f',
     server: 's',
     name: 'n'
@@ -28,6 +31,7 @@ if (!argv.channel && !argv.feed || argv.help) {
   console.error('  --mirror=[channel-name]  IRC channel to mirror')
   console.error('  --server=[irc-server]    Optional IRC server. Defaults to freenode')
   console.error('  --tail=[feed-key]        A mirrored channel to tail')
+  console.error('  --database=[db-path]     Path for database. Defaults to ~/.hyperirc.db')
   console.error('  --webrtc                 Share over webrtc as well.')
   console.error('  --all                    Print the entire channel log.')
   console.error()
@@ -38,7 +42,7 @@ if (!argv.channel && !argv.feed || argv.help) {
 
 if (argv.channel) argv.channel = argv.channel.replace(/^#/, '')
 
-var db = level('hyperirc.db')
+var db = level(argv.database || path.join(home(), '.hyperirc.db'))
 var core = hypercore(db)
 
 db.get('!hyperirc!!channels!' + argv.channel, {valueEncoding: 'binary'}, function (_, key) {
