@@ -57,7 +57,7 @@ To view the logs in the browser visit the static website hosted here, https://gi
 
 * #dat on freenode, `hyperirc --tail=4e397d94d0f5df0e2268b2b7b23948b6dddfca66f91c2d452f404202e6d0f626`
 * #datland on freenode, `hyperirc --tail=c171af3ab6d6936f8b4d3a9abb19f2f2adccf1c27a6c2bf17e05950f30ac698f`
-* #cphftw on freenode, `hyperirc --tail=a8d20e7d305a95904798142de0b75dff251b84db73873fd4aba73d5bdc7b50cf`
+* #cphftw on freenode, `hyperirc --tail=f93d568521e82722e4473ac0563aa8d4a2e2becb5c6dd2e1276532c5f4e521a0`
 * #stackvm on freenode, `hyperirc --tail=9d25a90d0422904b876d226116903809a374dc4156b0b349f55ccf9e19ecfbd4`
 
 If you mirror a channel open a PR and add your key.
