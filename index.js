@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 
 var irc = require('irc')
-var level = require('level-party')
 var hypercore = require('hypercore')
 var swarm = require('discovery-swarm')
-var defaults = require('datland-swarm-defaults')
+var defaults = require('dat-swarm-defaults')
 var minimist = require('minimist')
 var home = require('os-homedir')
 var path = require('path')
@@ -31,7 +30,7 @@ if (!argv.channel && !argv.feed || argv.help) {
   console.error('  --mirror=[channel-name]  IRC channel to mirror')
   console.error('  --server=[irc-server]    Optional IRC server. Defaults to freenode')
   console.error('  --tail=[feed-key]        A mirrored channel to tail')
-  console.error('  --database=[db-path]     Path for database. Defaults to ~/.hyperirc.db')
+  console.error('  --database=[db-path]     Path for database. Defaults to ~/.hyperirc')
   console.error('  --webrtc                 Share over webrtc as well.')
   console.error('  --all                    Print the entire channel log.')
   console.error()
@@ -42,17 +41,17 @@ if (!argv.channel && !argv.feed || argv.help) {
 
 if (argv.channel) argv.channel = argv.channel.replace(/^#/, '')
 
-var db = level(argv.database || path.join(home(), '.hyperirc.db'))
-var core = hypercore(db)
+var db = argv.database || path.join(home(), '.hyperirc', argv.channel || argv.feed)
+var feed = hypercore(db, argv.feed, {valueEncoding: 'json'})
+var peerCnt = 0
 
-db.get('!hyperirc!!channels!' + argv.channel, {valueEncoding: 'binary'}, function (_, key) {
-  var feed = core.createFeed(key || argv.feed)
-  var cnt = 0
-
+feed.ready(function () {
   var sw = swarm(defaults({
     hash: false,
     stream: function () {
-      return feed.replicate()
+      return feed.replicate({
+        live: true
+      })
     }
   }))
 
@@ -63,32 +62,27 @@ db.get('!hyperirc!!channels!' + argv.channel, {valueEncoding: 'binary'}, functio
       channels: [channel]
     })
 
-    feed.open(function (err) {
-      if (err) throw err
+    if (!feed.length) feed.append({channel: channel})
 
-      if (!feed.blocks) feed.append(channel)
-
-      client.on('message', function (from, to, message) {
-        feed.append(from + '> ' + message)
-      })
-
-      db.put('!hyperirc!!channels!' + argv.channel, feed.key)
-      console.log('Mirroring ' + channel + ' to ' + feed.key.toString('hex'))
+    client.on('message', function (from, to, message) {
+      feed.append({ from: from, message: message, timestamp: Date.now() })
     })
+
+    console.log('Mirroring ' + channel + ' to ' + feed.key.toString('hex'))
   }
 
-  feed.get(0, function (err, channel) {
+  feed.get(0, function (err, data) {
     if (err) throw err
 
     if (!argv.channel) {
-      console.log('Tailing ' + channel.toString() + ' over hypercore')
+      console.log('Tailing ' + data.channel + ' over hypercore')
     }
 
-    var end = feed.blocks
+    var end = feed.length
 
     if (!argv.all) {
-      feed.once('download', function () {
-        if (feed.blocks - end > 10) {
+      feed.once('sync', function () {
+        if (feed.length - end > 10) {
           stream.destroy()
           console.log('(skipping to latest messages)')
           tail()
@@ -99,9 +93,9 @@ db.get('!hyperirc!!channels!' + argv.channel, {valueEncoding: 'binary'}, functio
     var stream = tail()
 
     function tail () {
-      var stream = feed.createReadStream({live: true, start: argv.all ? 0 : Math.max(feed.blocks - 10, 1)})
+      var stream = feed.createReadStream({live: true, start: argv.all ? 1 : Math.max(feed.length - 10, 1)})
         .on('data', function (data) {
-          console.log(data.toString())
+          console.log(`${Date(data.timestamp).toLocaleString()} ${data.from} > ${data.message}`)
         })
 
       return stream
@@ -110,9 +104,9 @@ db.get('!hyperirc!!channels!' + argv.channel, {valueEncoding: 'binary'}, functio
 
   sw.join(feed.discoveryKey)
   sw.on('connection', function (peer) {
-    console.log('(peer joined, %d total)', ++cnt)
+    console.log('(peer joined, %d total)', ++peerCnt)
     peer.on('close', function () {
-      console.log('(peer left, %d total)', --cnt)
+      console.log('(peer left, %d total)', --peerCnt)
     })
   })
 
@@ -125,10 +119,10 @@ db.get('!hyperirc!!channels!' + argv.channel, {valueEncoding: 'binary'}, functio
     })
 
     wsw.on('peer', function (connection) {
-      console.log('(webrtc peer joined, %d total', ++cnt)
+      console.log('(webrtc peer joined, %d total', ++peerCnt)
       var peer = feed.replicate()
       pump(peer, connection, peer, function () {
-        console.log('(webrtc peer left, %d total', --cnt)
+        console.log('(webrtc peer left, %d total', --peerCnt)
       })
     })
   }

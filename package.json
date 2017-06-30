@@ -7,12 +7,10 @@
     "hyperirc": "./index.js"
   },
   "dependencies": {
-    "datland-swarm-defaults": "^1.0.0",
-    "discovery-swarm": "^3.4.0",
-    "electron-webrtc": "^0.2.5",
-    "hypercore": "^4.2.5",
-    "irc": "^0.5.0",
-    "level-party": "^3.0.4",
+    "dat-swarm-defaults": "^1.0.0",
+    "discovery-swarm": "^4.4.0",
+    "hypercore": "^6.6.3",
+    "irc": "^0.5.2",
     "minimist": "^1.2.0",
     "os-homedir": "^1.0.1"
   },
@@ -33,7 +31,7 @@
   },
   "homepage": "https://github.com/mafintosh/hyperirc",
   "optionalDependencies": {
-    "electron-webrtc": "^0.2.5",
+    "electron-webrtc": "^0.2.12",
     "pump": "^1.0.1",
     "signalhub": "^4.5.1",
     "webrtc-swarm": "^2.4.0"
