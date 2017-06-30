@@ -34,7 +34,7 @@ hyperirc --tail=the-key-printed-out-above
 
 Thats it! Every peer tailing (and the peer mirroring) will join the p2p network and help eachother host the irc logs.
 
-By default, hyperirc will save its database under `~/.hyperirc.db`. You may choose your own location.
+By default, hyperirc will save its database under `~/.hyperirc`. You may choose your own location.
 
 ```sh
 hyperirc --mirror=an-irc-channel --database=/path/to/db
