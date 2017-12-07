@@ -95,7 +95,7 @@ feed.ready(function () {
     function tail () {
       var stream = feed.createReadStream({live: true, start: argv.all ? 1 : Math.max(feed.length - 10, 1)})
         .on('data', function (data) {
-          console.log(`${Date(data.timestamp).toLocaleString()} ${data.from} > ${data.message}`)
+          console.log(`${new Date(data.timestamp).toLocaleString()} ${data.from} > ${data.message}`)
         })
 
       return stream
